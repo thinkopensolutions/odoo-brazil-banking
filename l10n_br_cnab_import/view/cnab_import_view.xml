@@ -9,10 +9,15 @@
             <field name="priority" eval="14"/>
             <field name="arch" type="xml">
                 <data>
-
+                    <!-- hide import modes if it is not cnab import
+                    if it is cnab import set import modes required-->
                     <field name="journal_id" position="after">
-                        <label for="import_modes"/>
-                        <field name="import_modes"/>
+                        <label for="import_cnab" colspan="4"/>
+                        <field name="import_cnab" colspan="4"/>
+                        <br/>
+                        <label for="import_modes" attrs="{'required' :[('import_cnab','=',True)], 'invisible':[('import_cnab','=',False)],}"/>
+                        <field name="import_modes"
+                               attrs="{'required' :[('import_cnab','=',True)], 'invisible':[('import_cnab','=',False)],}"/>
                     </field>
 
                 </data>
