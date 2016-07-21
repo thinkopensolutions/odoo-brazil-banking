@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Account Payment Boleto module for Odoo
@@ -32,6 +32,7 @@
     'website': 'http://www.kmee.com.br',
     'depends': [
         'l10n_br_account_payment_mode',
+        'account_due_list',
         'base_transaction_id',
     ],
     'data': [
@@ -39,10 +40,10 @@
         'views/res_company.xml',
         'views/payment_mode.xml',
         'views/account_move_line.xml',
+        'views/res_partner_bank.xml',
         'reports/report_print_button_view.xml',
     ],
     'demo': [
         'demo/payment_demo.xml',
     ],
-    'active': False,
 }

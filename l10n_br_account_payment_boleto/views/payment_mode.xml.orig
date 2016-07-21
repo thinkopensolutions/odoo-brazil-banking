@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_payment_mode_form_inherit_boleto" model="ir.ui.view">
+            <field name="name">payment.mode.boleto.form.inherit</field>
+            <field name="model">payment.mode</field>
+            <field name="inherit_id" ref="l10n_br_account_payment_mode.view_payment_mode_form_inherit_l10n_br_payment"/>
+            <field name="priority" eval="13"/>
+            <field name="arch" type="xml">
+                <group name="boletos"
+                        position="inside">
+<<<<<<< HEAD
+                    <group>
+                        <field name="boleto_type"/>
+                        <field name="boleto_convenio"/>
+                        <field name="boleto_carteira"/>
+                        <field name="boleto_modalidade"/>
+                        <field name="boleto_variacao"/>
+                        <field name="boleto_cnab_code"/>
+                        <field name="boleto_aceite"/>
+                        <field name="boleto_especie"/>
+                        <field name="boleto_protesto"/>
+                        <field name="boleto_protesto_prazo"/>
+                        <field name="instrucoes"/>  
+                    </group>
+                </xpath>
+                <!--</data>-->
+=======
+                    <field name="boleto_type"/>
+                    <field name="boleto_convenio"/>
+                    <field name="boleto_carteira"/>
+                    <field name="boleto_modalidade"/>
+                    <field name="boleto_variacao"/>
+                    <field name="boleto_cnab_code"/>
+                    <field name="boleto_aceite"/>
+                    <field name="boleto_especie"/>
+                    <field name="boleto_protesto"/>
+                    <field name="boleto_protesto_prazo"/>
+                </group>
+                <field name="internal_sequence_id" position="after">
+                    <field name="late_payment_fee"/>
+                    <field name="late_payment_interest"/>
+                </field>
+>>>>>>> 48220ee6b6bd2e70c09cf53c8a58b0eb427a4103
+            </field>
+        </record>
+    </data>
+</openerp>
