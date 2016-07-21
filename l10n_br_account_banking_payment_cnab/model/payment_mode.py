@@ -21,7 +21,7 @@
 ##############################################################################
 
 from openerp import models, fields
-
+from openerp.addons import decimal_precision as dp
 
 class PaymentMode(models.Model):
     _inherit = "payment.mode"

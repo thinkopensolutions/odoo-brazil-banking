@@ -58,7 +58,6 @@ class AccountMoveLine(models.Model):
     @api.multi
     def send_payment(self):
         boleto_list = []
-<<<<<<< HEAD
         self.validate_boleto_config()
         for move_line in self:
             if move_line.payment_mode_id.type_payment == '00':
@@ -70,8 +69,6 @@ class AccountMoveLine(models.Model):
                     elif number_type == '1':
                         nosso_numero = \
                             move_line.transaction_ref.replace('/', '')
-=======
-        for move_line in self:
             try:
                 if move_line.payment_mode_id.type_sale_payment == '00':
                     number_type = move_line.company_id.own_number_type
