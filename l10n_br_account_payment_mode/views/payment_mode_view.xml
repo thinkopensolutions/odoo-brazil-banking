@@ -7,27 +7,45 @@
             <field name="inherit_id" ref="account_banking_payment_export.view_payment_mode_form_inherit"/>
             <field name="priority" eval="14"/>
             <field name="arch" type="xml">
+
                 <field name="type" position="after">
                     <field name="payment_order_type"/>
+                    <field name="internal_sequence_id"/>
+                    <field name="type_payment"/>
+                    <field name="invoice_print"/>
                 </field>
-                <group name="payment_order_create_defaults" position="before">
-                    <group string="Cobrança e Pagamentos" name='l10n-br-config' col="4">
-                        <group name="general">
-                            <field name="internal_sequence_id"/>
-                            <field name="invoice_print"/>
-                            <field name="instrucoes"/>
-                        </group>
-                        <group name="cobranca"  attrs="{ 'invisible': [('payment_order_type', '!=', 'cobranca')] }">
-                            <field name="type_sale_payment"/>
-                            <group name="boletos" string="Boleto"
-                                attrs="{'invisible': [('type_sale_payment', '!=', '00')]}" >
-                            </group>
-                        </group>
-                        <group name="payment" attrs="{ 'invisible': [('payment_order_type', '!=', 'payment')] }">
-                            <field name="type_purchase_payment"/>
-                        </group>
+                <xpath expr="//form/group[@string='Note']" position="before">
+                    <group string="Configurações" name='l10n-br-config' col="4">
+                        <notebook colspan="4">
+                            <page string="Cobrança" attrs="{'invisible': [('sale_ok', '!=', True)]}">
+                                <group>
+                                    <field name="type_sale_payment" invisible="1"/>
+                                </group>
+                                <notebook>
+                                    <page string="Boleto"
+                                        attrs="{'invisible': [('type_sale_payment', '!=', '00')]}">
+                                    </page>
+                                    <page string="Cheque"
+                                          attrs="{'invisible': [('type_sale_payment', '!=', '01')]}">
+                                    </page>
+                                    <page string="Promissoria"
+                                          attrs="{'invisible': [('type_sale_payment', '!=', '02')]}">
+                                    </page>
+                                    <page string="Recibo"
+                                          attrs="{'invisible': [('type_sale_payment', '!=', '03')]}">
+                                    </page>
+                                </notebook>
+                            </page>
+                            <page string="Pagamento" attrs="{'invisible': [('purchase_ok', '!=', True)]}">
+                                <group>
+                                    <field name="type_purchase_payment"/>
+
+                                </group>
+                            </page>
+                        </notebook>
                     </group>
-                </group>
+                </xpath>
+
             </field>
         </record>
 
@@ -39,7 +57,7 @@
             <field name="arch" type="xml">
                 <data>
                     <xpath expr="//field[@name='ir_model_id']" position="after">
-                        <field name="payment_order_type"/>
+                            <field name="payment_order_type"/>
                     </xpath>
                 </data>
             </field>
