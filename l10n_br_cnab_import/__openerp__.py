@@ -37,6 +37,7 @@
     'data': [
         'view/cnab_import_view.xml',
         'view/bank_statement.xml',
+        'view/cnab_import_lines_view.xml',
     ],
     "installable": True,
     'description': """

@@ -22,11 +22,17 @@
 from openerp import api, models, fields
 
 
-class AccountBankStatement(models.Model):
+class CnabLines(models.Model):
     """  """
-    _inherit = 'account.bank.statement'
+    _name = 'cnab.lines'
 
-    statement_type = fields.Selection([('c','CNAB Return'),('b','Bank Statement')],
-                                      default='b', required=True, string="Type")
-
-    cnab_lines = fields.One2many('cnab.lines','statement_id','CNAB Lines')
+    name = fields.Char(string="Name", required=False, )
+    account_no = fields.Char('Account No')
+    amount = fields.Float('Amount')
+    ref = fields.Char('Reference')
+    date = fields.Date('Date')
+    error_message = fields.Char("Error Message")
+    partner_id = fields.Many2one('res.partner','Partner')
+    unique_import_id = fields.Char('Unique Import ID')
+    transaction_id = fields.Char('Transaction ID')
+    statement_id = fields.Many2one('account.bank.statement', 'Bank Statement')

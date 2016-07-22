@@ -68,6 +68,22 @@ class AccountBankStatementImport(models.TransientModel):
         return bank_account_id
 
     @api.model
+    def create_cnab_lines(self, line_vals, statement_id):
+        line_vals.update({'statement_id' : statement_id})
+        cnab_line = self.env['cnab.lines'].create(line_vals)
+        return  cnab_line
+
+
+    @api.model
+    def _create_bank_statement(self, stmt_vals):
+
+        statement_id, notifications = super(AccountBankStatementImport,self)._create_bank_statement(stmt_vals)
+        if stmt_vals.get('statement_type') == 'c':
+            for line in stmt_vals['line_ids']:
+                self.create_cnab_lines(line[2], statement_id)
+        return  statement_id, notifications
+
+    @api.model
     def _complete_statement(self, stmt_vals, journal_id, account_number):
         """Complete statement from information passed.
             unique_import_id is assumed to already be unique at the moment of
@@ -87,7 +103,8 @@ class AccountBankStatementImport(models.TransientModel):
                 payment = self.env['payment.line'].search(
                     [('name', '=', line_vals['unique_import_id'])])
                 line_vals['partner_id'] = payment.partner_id.id
-
+        if self.import_cnab:
+            stmt_vals.update({'statement_type': 'c'})
         return stmt_vals
 
     @api.multi

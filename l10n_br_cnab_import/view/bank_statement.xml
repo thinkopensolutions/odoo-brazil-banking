@@ -10,6 +10,20 @@
                 <field name="balance_end_real" position="after">
                     <field name="statement_type"/>
                 </field>
+                <page string="Transactions" position="after" >
+                    <page string="CNAB Lines" readonly="1" attrs="{'invisible': [('statement_type','!=','c')]}">
+                        <field name="cnab_lines" nolabel="1" >
+                            <tree>
+                                <field name="date"/>
+                                <field name="name"/>
+                                <field name="partner_id"/>
+                                <field name="ref"/>
+                                <field name="transaction_id"/>
+                                <field name="unique_import_id"/>
+                            </tree>
+                        </field>
+                    </page>
+                </page>
             </field>
         </record>
 
