@@ -26,6 +26,7 @@ class CnabLines(models.Model):
     """  """
     _name = 'cnab.lines'
 
+    # date, name, type , error showing only 4 columns in tree view
     name = fields.Char(string="Name", required=False, )
     account_no = fields.Char('Account No')
     amount = fields.Float('Amount')
