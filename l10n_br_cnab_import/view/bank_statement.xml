@@ -8,7 +8,7 @@
             <field name="inherit_id" ref="account.view_bank_statement_form" />
             <field name="arch" type="xml">
                 <field name="balance_end_real" position="after">
-                    <field name="statement_type"/>
+                    <field name="statement_type" invisible="1"/>
                 </field>
                 <page string="Transactions" position="after" >
                     <page string="CNAB Lines" readonly="1" attrs="{'invisible': [('statement_type','!=','c')]}">
@@ -26,7 +26,50 @@
                 </page>
             </field>
         </record>
-
-
+        
+        <record id="account.action_bank_statement_tree" model="ir.actions.act_window">
+            <field name="name">Bank Statements</field>
+            <field name="res_model">account.bank.statement</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,graph</field>
+            <field name="domain">[('journal_id.type', '=', 'bank'),('statement_type','=','b')]</field>
+            <field name="context">{'journal_type':'bank', 'default_statement_type': 'b'}</field>
+            <field name="search_view_id" ref="account.view_bank_statement_search"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to register a bank statement.
+              </p><p>
+                A bank statement is a summary of all financial transactions
+                occurring over a given period of time on a bank account. You
+                should receive this periodicaly from your bank.
+              </p><p>
+                Odoo allows you to reconcile a statement line directly with
+                the related sale or puchase invoices.
+              </p>
+            </field>
+        </record>
+		
+        <record id="action_bank_statement_cnab_return" model="ir.actions.act_window">
+            <field name="name">CNAB Return Statements </field>
+            <field name="res_model">account.bank.statement</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,graph</field>
+            <field name="domain">[('journal_id.type', '=', 'bank'),('statement_type','=','c')]</field>
+            <field name="context">{'journal_type':'bank', 'default_statement_type': 'c'}</field>
+            <field name="search_view_id" ref="account.view_bank_statement_search"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to register a bank statement.
+              </p><p>
+                A bank statement is a summary of all financial transactions
+                occurring over a given period of time on a bank account. You
+                should receive this periodicaly from your bank.
+              </p><p>
+                Odoo allows you to reconcile a statement line directly with
+                the related sale or puchase invoices.
+              </p>
+            </field>
+        </record>
+		<menuitem string="Cnab Return Statements" action="action_bank_statement_cnab_return" id="menu_cnab_statement_tree" parent="account.menu_finance_bank_and_cash" sequence="7"/>
     </data>
 </openerp>
