@@ -20,6 +20,7 @@
                                 <field name="ref"/>
                                 <field name="transaction_id"/>
                                 <field name="unique_import_id"/>
+                                <field name="servico_codigo_movimento"/>
                             </tree>
                         </field>
                     </page>

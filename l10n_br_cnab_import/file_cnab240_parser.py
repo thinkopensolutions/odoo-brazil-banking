@@ -85,6 +85,7 @@ class Cnab240Parser(object):
                     'transaction_id': evento.numero_documento,
                     # nosso numero, Alfanumérico
                     'unique_import_id': evento.numero_documento,
+                    'servico_codigo_movimento': evento.servico_codigo_movimento
                 })
                 total_amt += evento.valor_titulo
 
@@ -118,5 +119,6 @@ class Cnab240Parser(object):
             'ref': line.get('ref', '/'),
             'label': line.get('label', ''),
             'transaction_id': line.get('transaction_id', '/'),
-            'commission_amount': line.get('commission_amount', 0.0)
+            'commission_amount': line.get('commission_amount', 0.0),
+            'servico_codigo_movimento' : line.get('servico_codigo_movimento',0)
         }
