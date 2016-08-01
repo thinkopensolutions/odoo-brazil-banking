@@ -9,16 +9,18 @@
             <field name="arch" type="xml">
                 <page string="Boleto"
                         position="inside">
-                    <field name="boleto_type"/>
-                    <field name="boleto_convenio"/>
-                    <field name="boleto_carteira"/>
-                    <field name="boleto_modalidade"/>
-                    <field name="boleto_variacao"/>
-                    <field name="boleto_cnab_code"/>
-                    <field name="boleto_aceite"/>
-                    <field name="boleto_especie"/>
-                    <field name="boleto_protesto"/>
-                    <field name="boleto_protesto_prazo"/>
+                        <group>
+                            <field name="boleto_type"/>
+                            <field name="boleto_convenio"/>
+                            <field name="boleto_carteira"/>
+                            <field name="boleto_modalidade"/>
+                            <field name="boleto_variacao"/>
+                            <field name="boleto_cnab_code"/>
+                            <field name="boleto_aceite"/>
+                            <field name="boleto_especie"/>
+                            <field name="boleto_protesto"/>
+                            <field name="boleto_protesto_prazo"/>
+                        </group>
                 </page>
                 <field name="internal_sequence_id" position="after">
                     <field name="late_payment_fee"/>
