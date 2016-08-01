@@ -16,6 +16,11 @@
                             <tree>
                                 <field name="date"/>
                                 <field name="name"/>
+                                <field name="partner_id"/>
+                                <field name="ref"/>
+                                <field name="transaction_id"/>
+                                <field name="unique_import_id"/>
+                                <field name="servico_codigo_movimento"/>
                             	<field name="error_message"/>
                                 <field name="partner_id" invisible="1"/>
                                 <field name="ref" invisible= "1"/>

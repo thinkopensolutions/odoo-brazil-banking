@@ -37,3 +37,4 @@ class CnabLines(models.Model):
     unique_import_id = fields.Char('Unique Import ID')
     transaction_id = fields.Char('Transaction ID')
     statement_id = fields.Many2one('account.bank.statement', 'Bank Statement')
+    servico_codigo_movimento = fields.Char("Servico Codigo Movimento")
