@@ -37,6 +37,7 @@
     'data': [
         'view/cnab_import_view.xml',
         'view/bank_statement.xml',
+        'security/ir.model.access.csv',
     ],
     "installable": True,
     'description': """
