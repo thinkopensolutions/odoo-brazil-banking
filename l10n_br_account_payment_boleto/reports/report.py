@@ -57,8 +57,24 @@ class report_custom(report_int):
         if active_model == 'account.invoice':
             ai_obj = pool.get('account.invoice')
             for account_invoice in ai_obj.browse(cr, uid, active_ids):
+                ids_move_lines_attach = []
                 for move_line in account_invoice.move_line_receivable_id:
                     ids_move_lines.append(move_line.id)
+                    ids_move_lines_attach.append(move_line.id)
+
+                # generate separate report for each invoice to attach
+                if len(ids_move_lines_attach):
+                    boleto_list = aml_obj.send_payment(cr, uid, ids_move_lines_attach)
+                    pdf_string_attach = Boleto.get_pdfs(boleto_list)
+                    file_name = "INV-%s-boleto.pdf" % account_invoice.move_id.name
+                    attach_vals = {
+                        'name': file_name,
+                        'datas_fname': file_name,
+                        'datas': base64.b64encode(pdf_string_attach),
+                        'res_model': 'account.invoice',
+                        'res_id': account_invoice.id,
+                    }
+                    pool.get('ir.attachment').create(cr, uid, attach_vals)
             if not len(ids_move_lines):
                 raise Warning("No receivable or payable move lines found. Please set Gera Financeiro to True in Journal")
         elif active_model == 'account.move.line':
@@ -74,17 +90,6 @@ class report_custom(report_int):
                             'forma de pagamento seja duplicatas'))
         pdf_string = Boleto.get_pdfs(boleto_list)
         self.obj = external_pdf(pdf_string)
-        if active_model == 'account.invoice' and len(active_ids):
-            for account_invoice in ai_obj.browse(cr, uid, active_ids):
-                file_name = "INV-%s-boleto.pdf" %account_invoice.move_id.name
-                attach_vals = {
-                    'name': file_name,
-                    'datas_fname': file_name,
-                    'datas': base64.b64encode(pdf_string),
-                    'res_model': 'account.invoice',
-                    'res_id': account_invoice.id,
-                }
-                pool.get('ir.attachment').create(cr, uid, attach_vals)
         self.obj.render()
         return self.obj.pdf, 'pdf'
 
