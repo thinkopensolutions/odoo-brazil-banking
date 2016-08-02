@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+canb_lines_account_user,CNAB Lines Account User,model_cnab_lines,account.group_account_user,1,1,1,1
+canb_lines_account_manager,CNAB Lines Account Manager,model_cnab_lines,account.group_account_manager,1,1,1,1
+canb_lines_account_invoice,CNAB Lines Account Invoice,model_cnab_lines,account.group_account_invoice,1,1,1,1
