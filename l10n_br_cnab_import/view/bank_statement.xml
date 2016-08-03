@@ -12,8 +12,8 @@
                 </field>
                 <page string="Transactions" position="after" >
                     <page string="CNAB Lines" readonly="1" attrs="{'invisible': [('statement_type','!=','c')]}">
-                        <field name="cnab_lines" nolabel="1" >
-                            <tree readonly="1">
+                        <field name="cnab_lines" readonly="1" nolabel="1" >
+                            <tree>
                                 <field name="date"/>
                                 <field name="name"/>
                                 <field name="servico_codigo_movimento"/>
