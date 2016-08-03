@@ -13,15 +13,15 @@
                 <page string="Transactions" position="after" >
                     <page string="CNAB Lines" readonly="1" attrs="{'invisible': [('statement_type','!=','c')]}">
                         <field name="cnab_lines" nolabel="1" >
-                            <tree>
+                            <tree readonly="1">
                                 <field name="date"/>
                                 <field name="name"/>
-                                <field name="partner_id"/>
-                                <field name="ref"/>
-                                <field name="transaction_id"/>
-                                <field name="unique_import_id"/>
                                 <field name="servico_codigo_movimento"/>
                             	<field name="error_message"/>
+                                <field name="partner_id" invisible="1"/>
+                                <field name="ref" invisible="1"/>
+                                <field name="transaction_id" invisible="1"/>
+                                <field name="unique_import_id" invisible="1"/>
                                 <field name="partner_id" invisible="1"/>
                                 <field name="ref" invisible= "1"/>
                                 <field name="transaction_id" invisible="1"/>
@@ -61,7 +61,7 @@
             <field name="view_type">form</field>
             <field name="view_mode">tree,form,graph</field>
             <field name="domain">[('journal_id.type', '=', 'bank'),('statement_type','=','c')]</field>
-            <field name="context">{'journal_type':'bank', 'default_statement_type': 'c'}</field>
+            <field name="context">{'journal_type':'bank', 'default_statement_type': 'c', 'form_view_ref': 'account.view_bank_statement_form'}</field>
             <field name="search_view_id" ref="account.view_bank_statement_search"/>
             <field name="help" type="html">
               <p class="oe_view_nocontent_create">
