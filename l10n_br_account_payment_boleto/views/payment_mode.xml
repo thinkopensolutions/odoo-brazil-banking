@@ -20,6 +20,7 @@
                             <field name="boleto_especie"/>
                             <field name="boleto_protesto"/>
                             <field name="boleto_protesto_prazo"/>
+                            <field name="instrucoes"/>
                         </group>
                 </page>
                 <field name="internal_sequence_id" position="after">
