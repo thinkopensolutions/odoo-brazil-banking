@@ -17,4 +17,5 @@ account-payment
 bank-statement-reconcile
 bank-payment
 l10n-brazil
+bank-statement-import
 

@@ -31,6 +31,7 @@ import string
 import unicodedata
 import time
 from openerp.exceptions import Warning as UserError
+from openerp.tools.translate import _
 
 TIPO_CONTA_FORNECEDOR = [
     ('1', u'Conta corrente'),
@@ -145,6 +146,7 @@ FINALIDADE_DOC_TED = [
     ('99', u'Outros'),
 ]
 
+
 class PagFor500(Cnab):
     """
 
@@ -253,7 +255,7 @@ class PagFor500(Cnab):
         if not self.order.mode.boleto_aceite == 'S':
             aceite = u'A'
 
-        segmento =  {
+        segmento = {
             'conta_complementar': int(self.order.mode.bank_id.acc_number),
             # 'especie_titulo': 8,
 
@@ -295,13 +297,15 @@ class PagFor500(Cnab):
             'valor_acrescimo': Decimal('0.00'),
 
             # FIXME
-            'tipo_documento': 2, # NF, Fatura, Duplicata...
+            'tipo_documento': 2,  # NF, Fatura, Duplicata...
             # NF_Fatura_01/Fatura_02/NF_03/Duplicata_04/Outros_05
             'numero_nf': int(line.ml_inv_ref.internal_number),
 
             'modalidade_pagamento': int(line.order_id.mode.type_purchase_payment),
 
-            'data_para_efetivacao_pag': 0,  # Quando não informada o sistema assume a data constante do campo Vencimento
+            # Quando não informada o sistema assume a data constante do campo
+            # Vencimento
+            'data_para_efetivacao_pag': 0,
 
             'tipo_movimento': 0,
             # TODO Tipo de Movimento.
@@ -384,19 +388,19 @@ class PagFor500(Cnab):
         if mode in ('01'):
             return self.lancamento_credito_bradesco(line)
         elif mode in ('02'):
-            raise UserError('Operação não suportada')
+            raise UserError(_('Operação não suportada'))
         elif mode in ('03'):
             return self.lancamento_doc(line)
         elif mode in ('05'):
-            raise UserError('Operação não suportada')
+            raise UserError(_('Operação não suportada'))
         elif mode in ('08'):
             return self.lancamento_ted(line)
         elif mode in ('30'):
-            raise UserError('Operação não suportada')
+            raise UserError(_('Operação não suportada'))
         elif mode in ('31'):
             # titulos de terceiros
             return self.lancamento_titulos_terceiros(line)
-        raise UserError('Operação não suportada')
+        raise UserError(_('Operação não suportada'))
 
     def lancamento_credito_bradesco(self, line):
         # TODO:
@@ -426,12 +430,11 @@ class PagFor500(Cnab):
 
         return self._prepare_segmento(line, vals)
 
-
     def lancamento_ted(self, line):
         # TODO:
         # modalidade 08.
 
-        vals =  {
+        vals = {
             'conta_complementar': int(self.order.mode.bank_id.acc_number),
             'especie_titulo': line.order_id.mode.type_purchase_payment,
 
@@ -482,7 +485,7 @@ class PagFor500(Cnab):
     def lancamento_doc(self):
         # TODO:
 
-        vals =  {}
+        vals = {}
 
         return self._prepare_segmento(vals)
 
@@ -520,12 +523,13 @@ class PagFor500(Cnab):
     def montar_info_comple_ted(self):
         tipo_doc_compe = TIPO_DOC[0][0]
         num_doc_ted = '000000'
-        finalidade_doc_compe = FINALIDADE_DOC_TED[2][0] # pagamento duplicatas. Ou será 01?
+        finalidade_doc_compe = FINALIDADE_DOC_TED[2][
+            0]  # pagamento duplicatas. Ou será 01?
         tipo_conta_doc_ted = '01'
         codigo_identif_transf = '0000000000000000000000000'
         fim_do_campo = '    '
         info_comple = tipo_doc_compe + num_doc_ted + finalidade_doc_compe + \
-                      tipo_conta_doc_ted + codigo_identif_transf + fim_do_campo
+            tipo_conta_doc_ted + codigo_identif_transf + fim_do_campo
         return (info_comple.encode('utf-8'))
 
     def ler_linha_digitavel_codigos_ag_cc(self, linha_digitavel):

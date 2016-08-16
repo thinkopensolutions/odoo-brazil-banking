@@ -23,7 +23,7 @@
 
 {
     'name': 'Odoo Brazil Account Banking Payment Infrastructure',
-    'version': '0.1',
+    'version': '0.1.1',
     'category': 'Banking addons',
     'license': 'AGPL-3',
     'summary': '',

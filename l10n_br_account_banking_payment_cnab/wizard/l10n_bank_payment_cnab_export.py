@@ -66,15 +66,15 @@ class L10nPaymentCnab(models.TransientModel):
             self.state = 'done'
             self.cnab_file = base64.b64encode(remessa)
             file_name = 'CB%s%s.REM' % (
-                    time.strftime('%d%m'), str(order.file_number))
-            # create attachment in payment order 
+                time.strftime('%d%m'), str(order.file_number))
+            # create attachment in payment order
             attach_vals = {
                 'name': file_name,
                 'datas_fname': file_name,
                 'datas': base64.b64encode(remessa),
                 'res_model': 'payment.order',
-                'res_id' : order.id,
-                }
+                'res_id': order.id,
+            }
             self.env['ir.attachment'].create(attach_vals)
             self.env['ir.attachment'].create({
                 'name': self.name,

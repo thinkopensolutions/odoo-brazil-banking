@@ -32,6 +32,7 @@ except ImportError:
     _logger.warn("ofxparse not found, OFX parsing disabled.")
     ofxparser = None
 
+
 class AccountBankStatementImport(models.TransientModel):
     """Extend model account.bank.statement."""
     _inherit = 'account.bank.statement.import'
@@ -121,7 +122,7 @@ class AccountBankStatementImport(models.TransientModel):
                         vals_line['name'] += ' %s' % transaction.checknum
                 total_amt += float(transaction.amount)
                 transactions.append(vals_line)
-        except Exception, e:
+        except Exception as e:
             raise UserError(_(
                 "The following problem occurred during import. "
                 "The file might not be valid.\n\n %s" % e.message

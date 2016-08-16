@@ -24,6 +24,7 @@ import tempfile
 import datetime
 from decimal import Decimal
 from openerp.tools.translate import _
+from openerp.exceptions import Warning as UserError
 
 try:
     from cnab240.tipos import Arquivo
@@ -57,7 +58,7 @@ class Cnab240Parser(object):
             from cnab240.bancos import sicoob
             return sicoob
         else:
-            raise Warning(_('Modo de importação não encontrado.'))
+            raise UserError(_('Modo de importação não encontrado.'))
 
     def parse(self, data, banco_impt):
         """Launch the parsing itself."""
@@ -120,5 +121,5 @@ class Cnab240Parser(object):
             'label': line.get('label', ''),
             'transaction_id': line.get('transaction_id', '/'),
             'commission_amount': line.get('commission_amount', 0.0),
-            'servico_codigo_movimento' : line.get('servico_codigo_movimento',0)
+            'servico_codigo_movimento': line.get('servico_codigo_movimento', 0)
         }

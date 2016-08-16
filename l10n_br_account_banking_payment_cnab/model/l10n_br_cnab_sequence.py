@@ -35,4 +35,5 @@ class L10nBrCnabSequence(models.Model):
 
     # 'parent_id': fields.many2one('res.partner.category', 'Parent Category', select=True, ondelete='cascade')
     # 400: um modo de cobrança = 1 conta bancária = 1 sequencia de arquivo
-    # 500: n modos de pagamento (ted, doc) = 1 conta bancária = 1 sequencia de arquivo
+    # 500: n modos de pagamento (ted, doc) = 1 conta bancária = 1 sequencia de
+    # arquivo

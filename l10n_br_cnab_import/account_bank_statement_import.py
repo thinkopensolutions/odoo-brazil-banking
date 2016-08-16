@@ -44,7 +44,7 @@ class AccountBankStatementImport(models.TransientModel):
     import_modes = fields.Selection(
         MODOS_IMPORTACAO_CNAB,
         string=u'Opções de importação', select=True, required=False)
-    import_cnab = fields.Boolean(string="Import Cnab",  )
+    import_cnab = fields.Boolean(string="Import Cnab",)
 
     @api.model
     def _check_cnab(self, data_file):
@@ -69,19 +69,19 @@ class AccountBankStatementImport(models.TransientModel):
 
     @api.model
     def create_cnab_lines(self, line_vals, statement_id):
-        line_vals.update({'statement_id' : statement_id})
+        line_vals.update({'statement_id': statement_id})
         cnab_line = self.env['cnab.lines'].create(line_vals)
-        return  cnab_line
-
+        return cnab_line
 
     @api.model
     def _create_bank_statement(self, stmt_vals):
 
-        statement_id, notifications = super(AccountBankStatementImport,self)._create_bank_statement(stmt_vals)
+        statement_id, notifications = super(
+            AccountBankStatementImport, self)._create_bank_statement(stmt_vals)
         if stmt_vals.get('statement_type') == 'c':
             for line in stmt_vals['line_ids']:
                 self.create_cnab_lines(line[2], statement_id)
-        return  statement_id, notifications
+        return statement_id, notifications
 
     @api.model
     def _complete_statement(self, stmt_vals, journal_id, account_number):

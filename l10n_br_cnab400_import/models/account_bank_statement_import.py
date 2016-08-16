@@ -23,7 +23,6 @@ import tempfile
 import StringIO
 from openerp import api, models, fields
 from openerp.tools.translate import _
-from openerp.exceptions import Warning
 from contextlib import contextmanager
 
 try:
@@ -116,7 +115,7 @@ class AccountBankStatementImport(models.TransientModel):
                             'balance_end_real': float(
                                 cnab.trailer
                                     .valor_registros_ocorrencia_06_liquidacao
-                            )/100,
+                            ) / 100,
                             'date':
                                 dia_criacao + "-" + mes_criacao + "-" +
                                 ano_criacao,
@@ -127,8 +126,8 @@ class AccountBankStatementImport(models.TransientModel):
                                 is_created = self.create_cnab_move(evento)
                             if is_created:
                                 if evento.identificacao_ocorrencia == 6 or \
-                                                evento.identificacao_ocorrencia\
-                                                == 15:
+                                        evento.identificacao_ocorrencia\
+                                        == 15:
                                     data = str(evento.data_ocorrencia_banco)
                                     if len(data) < 6:
                                         data = '0' + data
@@ -152,7 +151,7 @@ class AccountBankStatementImport(models.TransientModel):
                                         'name': str(evento.numero_documento),
                                         'ref': evento.numero_documento,
                                         'amount': float(
-                                            evento.valor_pago)/100,
+                                            evento.valor_pago) / 100,
                                         'unique_import_id':
                                             evento.identificacao_titulo_banco,
                                         'partner_id':
@@ -161,15 +160,15 @@ class AccountBankStatementImport(models.TransientModel):
                                     }
                                     event_list.append(vals_line)
                         vals_bank_statement['transactions'] = event_list
-                except Exception, e:
+                except Exception as e:
                     raise UserError(_(
                         "Erro!\n "
                         "Mensagem:\n\n %s" % e.message
                     ))
 
                 return False, str(
-                            cnab.header.codigo_empresa
-                       ), [vals_bank_statement]
+                    cnab.header.codigo_empresa
+                ), [vals_bank_statement]
         except:
             return super(AccountBankStatementImport, self)._parse_file(
                 data_file)
@@ -218,7 +217,7 @@ class AccountBankStatementImport(models.TransientModel):
             'str_motiv_c': motivos[2],
             'str_motiv_d': motivos[3],
             'str_motiv_e': motivos[4],
-            'valor': float(evento.valor_titulo)/100,
+            'valor': float(evento.valor_titulo) / 100,
         }
         cnab_move = self.env['l10n_br_cnab.move']
 

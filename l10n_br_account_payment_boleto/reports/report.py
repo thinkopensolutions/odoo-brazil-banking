@@ -27,9 +27,12 @@ from openerp import pooler
 from ..boleto.document import Boleto
 from openerp.osv import osv
 import base64
+from openerp.tools.translate import _
+from openerp.exceptions import Warning as UserError
 
 
 class external_pdf(render):
+
     def __init__(self, pdf):
         render.__init__(self)
         self.pdf = pdf
@@ -64,7 +67,8 @@ class report_custom(report_int):
 
                 # generate separate report for each invoice to attach
                 if len(ids_move_lines_attach):
-                    boleto_list = aml_obj.send_payment(cr, uid, ids_move_lines_attach)
+                    boleto_list = aml_obj.send_payment(
+                        cr, uid, ids_move_lines_attach)
                     pdf_string_attach = Boleto.get_pdfs(boleto_list)
                     file_name = "INV-%s-boleto.pdf" % account_invoice.move_id.name
                     attach_vals = {
@@ -76,7 +80,8 @@ class report_custom(report_int):
                     }
                     pool.get('ir.attachment').create(cr, uid, attach_vals)
             if not len(ids_move_lines):
-                raise Warning("No receivable or payable move lines found. Please set Gera Financeiro to True in Journal")
+                raise UserError(_(
+                    "No receivable or payable move lines found. Please set Gera Financeiro to True in Journal"))
         elif active_model == 'account.move.line':
             ids_move_lines = active_ids
         else:

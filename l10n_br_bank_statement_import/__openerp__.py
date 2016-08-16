@@ -22,7 +22,7 @@
 
 {
     'name': 'Importação de OFX - Brasil',
-    'version': '8.0.1.0.0',
+    'version': '8.0.1',
     'category': 'Banking addons',
     'license': 'AGPL-3',
     'author': 'Trustcode',

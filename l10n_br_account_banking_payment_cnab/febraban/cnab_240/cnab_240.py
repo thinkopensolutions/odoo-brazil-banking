@@ -75,7 +75,7 @@ class Cnab240(Cnab):
         :return:
         """
         return {
-            'cedente_agencia_conta_dv' : int(self.order.mode.bank_id.acc_number_dig),
+            'cedente_agencia_conta_dv': int(self.order.mode.bank_id.acc_number_dig),
             'controle_banco': int(self.order.mode.bank_id.bank_bic),
             'arquivo_data_de_geracao': self.data_hoje(),
             'arquivo_hora_de_geracao': self.hora_agora(),
@@ -153,20 +153,19 @@ class Cnab240(Cnab):
         # Era cedente_agencia_conta_dv agora é cedente_dv_ag_cc
 
         return {
-            'cedente_agencia_conta_dv' : int(self.order.mode.bank_id.acc_number_dig),
+            'cedente_agencia_conta_dv': int(self.order.mode.bank_id.acc_number_dig),
             'controle_banco': int(self.order.mode.bank_id.bank_bic),
             'cedente_agencia': int(self.order.mode.bank_id.bra_number),
             'cedente_conta': int(self.order.mode.bank_id.acc_number),
             'cedente_conta_dv': self.order.mode.bank_id.acc_number_dig,
             'cedente_agencia_dv': self.order.mode.bank_id.bra_number_dig,
             'cedente_nome': self.order.company_id.legal_name,
-            'cedente_conta': int(self.order.mode.bank_id.acc_number),
             # DV ag e cc
             'cedente_dv_ag_cc': (self.order.mode.bank_id.acc_number_dig),
-            'identificacao_titulo': line.move_line_id.name,  # 25 chars limit 
+            'identificacao_titulo': line.move_line_id.name,  # 25 chars limit
             'identificacao_titulo_banco': u'0000000',  # TODO
-            'identificacao_titulo_empresa': line.move_line_id.move_id.name, 
-            'numero_documento': line.move_line_id.invoice.number, # 10 chars limit 
+            'identificacao_titulo_empresa': line.move_line_id.move_id.name,
+            'numero_documento': line.move_line_id.invoice.number,  # 10 chars limit
             'vencimento_titulo': self.format_date(
                 line.ml_maturity_date),
             'valor_titulo': Decimal(str(line.amount_currency)).quantize(
@@ -182,14 +181,14 @@ class Cnab240(Cnab):
             'codigo_juros': 2,
             'juros_mora_data': self.format_date(
                 line.ml_maturity_date),
-            'juros_mora_taxa':  Decimal(
+            'juros_mora_taxa': Decimal(
                 str(self.order.mode.late_payment_interest)).quantize(
                     Decimal('1.00')),
             # Multa padrão em percentual no Odoo, valor '2'
             'codigo_multa': '2',
             'data_multa': self.format_date(
                 line.ml_maturity_date),
-            'juros_multa':  Decimal(
+            'juros_multa': Decimal(
                 str(self.order.mode.late_payment_fee)).quantize(
                     Decimal('1.00')),
             # TODO Remover taxa dia - deixar apenas taxa normal
@@ -232,11 +231,10 @@ class Cnab240(Cnab):
             self.arquivo.lotes[0].header.servico_servico = 1
             # TODO: tratar soma de tipos de cobranca
             cobrancasimples_valor_titulos += line.amount_currency
-            #fixed 'quantidade_registros'  in trailer to 000001 
+            # fixed 'quantidade_registros'  in trailer to 000001
             self.arquivo.lotes[0].trailer.cobrancasimples_valor_titulos = \
                 Decimal(cobrancasimples_valor_titulos).quantize(
                     Decimal('1.00'))
-            
 
         remessa = unicode(self.arquivo)
         return unicodedata.normalize(
