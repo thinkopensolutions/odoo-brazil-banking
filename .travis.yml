@@ -69,6 +69,7 @@ virtualenv:
 install:
   - git clone --depth=1 https://github.com/OCA/maintainer-quality-tools.git ${HOME}/maintainer-quality-tools
   - export PATH=${HOME}/maintainer-quality-tools/travis:${PATH}
+  - pip install FixedWidth
   - pip install pyboleto
   - pip install https://github.com/odoo-brazil/cnab240/archive/develop.zip
   - travis_install_nightly
