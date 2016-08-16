@@ -61,6 +61,17 @@ class AccountMoveLine(models.Model):
                 raise UserError(_(u"Carteira not set in payment method"))
             if not move_line.payment_mode_id.instrucoes:
                 raise UserError(_(u"Instrucoes not set in payment method"))
+            else:
+                if isinstance(move_line.payment_mode_id.instrucoes, basestring):
+                    list_inst = move_line.payment_mode_id.instrucoes.splitlines()
+                    # 7 lines allowed but we append last line with multa in the text
+                    if len(list_inst) > 6:
+                        raise Warning(
+                            u'Número de linhas de instruções maior que 6')
+                    for line in list_inst:
+                        if len(line) > 90:
+                            raise Warning(
+                                u'Linha de instruções: "%s" possui mais que 90 caracteres' %line)
             return True
 
     @api.multi
