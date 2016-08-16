@@ -27,6 +27,8 @@ from openerp import pooler
 from ..boleto.document import Boleto
 from openerp.osv import osv
 import base64
+from openerp.tools.translate import _
+from openerp.exceptions import Warning as UserError
 
 
 class external_pdf(render):
@@ -78,8 +80,8 @@ class report_custom(report_int):
                     }
                     pool.get('ir.attachment').create(cr, uid, attach_vals)
             if not len(ids_move_lines):
-                raise Warning(
-                    "No receivable or payable move lines found. Please set Gera Financeiro to True in Journal")
+                raise UserError(_(
+                    "No receivable or payable move lines found. Please set Gera Financeiro to True in Journal"))
         elif active_model == 'account.move.line':
             ids_move_lines = active_ids
         else:

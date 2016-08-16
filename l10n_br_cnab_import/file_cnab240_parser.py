@@ -24,6 +24,7 @@ import tempfile
 import datetime
 from decimal import Decimal
 from openerp.tools.translate import _
+from openerp.exceptions import Warning as UserError
 
 try:
     from cnab240.tipos import Arquivo
@@ -57,7 +58,7 @@ class Cnab240Parser(object):
             from cnab240.bancos import sicoob
             return sicoob
         else:
-            raise Warning(_('Modo de importação não encontrado.'))
+            raise UserError(_('Modo de importação não encontrado.'))
 
     def parse(self, data, banco_impt):
         """Launch the parsing itself."""

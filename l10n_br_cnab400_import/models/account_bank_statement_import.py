@@ -23,7 +23,6 @@ import tempfile
 import StringIO
 from openerp import api, models, fields
 from openerp.tools.translate import _
-from openerp.exceptions import Warning
 from contextlib import contextmanager
 
 try:

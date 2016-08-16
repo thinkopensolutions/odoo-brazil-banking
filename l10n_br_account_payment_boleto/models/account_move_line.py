@@ -25,7 +25,8 @@ from openerp import models, fields, api
 from datetime import date
 from ..boleto.document import Boleto
 from ..boleto.document import BoletoException
-from openerp.exceptions import Warning
+from openerp.tools.translate import _
+from openerp.exceptions import Warning as UserError
 
 _logger = logging.getLogger(__name__)
 
@@ -43,23 +44,23 @@ class AccountMoveLine(models.Model):
     def validate_boleto_config(self):
         for move_line in self:
             if move_line.payment_mode_id.type_payment != '00':
-                raise Warning(
+                raise UserError(_(
                     u"In payment mode %s Tipo SPED must be 00 - Duplicata" %
-                    move_line.payment_mode_id.name)
+                    move_line.payment_mode_id.name))
             if not move_line.payment_mode_id.internal_sequence_id:
-                raise Warning(
+                raise UserError(_(
                     u"Please set sequence in payment mode %s" %
-                    move_line.payment_mode_id.name)
+                    move_line.payment_mode_id.name))
             if move_line.company_id.own_number_type != '2':
-                raise Warning(
-                    u"Tipo de nosso número Sequéncial uniquo por modo de pagamento")
+                raise UserError(_(
+                    u"Tipo de nosso número Sequéncial uniquo por modo de pagamento"))
             if not move_line.payment_mode_id.boleto_type:
-                raise Warning(
-                    u"Configure o tipo de boleto no modo de pagamento")
+                raise UserError(_(
+                    u"Configure o tipo de boleto no modo de pagamento"))
             if not move_line.payment_mode_id.boleto_carteira:
-                raise Warning(u"Carteira not set in payment method")
+                raise UserError(_(u"Carteira not set in payment method"))
             if not move_line.payment_mode_id.instrucoes:
-                raise Warning(u"Instrucoes not set in payment method")
+                raise UserError(_(u"Instrucoes not set in payment method"))
             return True
 
     @api.multi
@@ -86,8 +87,8 @@ class AccountMoveLine(models.Model):
                 try:
                     int(nosso_numero)
                 except:
-                    raise Warning(
-                        u"Nosso numero must be integer please check prefix and suffix in payment method sequence")
+                    raise UserError(_(
+                        u"Nosso numero must be integer please check prefix and suffix in payment method sequence"))
                 boleto = Boleto.getBoleto(move_line, nosso_numero)
                 if boleto:
                     move_line.date_payment_created = date.today()
