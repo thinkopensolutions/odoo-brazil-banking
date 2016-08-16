@@ -120,5 +120,5 @@ class Cnab240Parser(object):
             'label': line.get('label', ''),
             'transaction_id': line.get('transaction_id', '/'),
             'commission_amount': line.get('commission_amount', 0.0),
-            'servico_codigo_movimento' : line.get('servico_codigo_movimento',0)
+            'servico_codigo_movimento': line.get('servico_codigo_movimento', 0)
         }

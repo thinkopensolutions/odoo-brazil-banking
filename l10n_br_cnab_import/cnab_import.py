@@ -33,7 +33,7 @@ class CnabLines(models.Model):
     ref = fields.Char('Reference')
     date = fields.Date('Date')
     error_message = fields.Char("Error Message")
-    partner_id = fields.Many2one('res.partner','Partner')
+    partner_id = fields.Many2one('res.partner', 'Partner')
     unique_import_id = fields.Char('Unique Import ID')
     transaction_id = fields.Char('Transaction ID')
     statement_id = fields.Many2one('account.bank.statement', 'Bank Statement')

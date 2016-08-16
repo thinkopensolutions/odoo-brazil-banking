@@ -26,7 +26,7 @@ class AccountBankStatement(models.Model):
     """  """
     _inherit = 'account.bank.statement'
 
-    statement_type = fields.Selection([('c','CNAB Return'),('b','Bank Statement')],
+    statement_type = fields.Selection([('c', 'CNAB Return'), ('b', 'Bank Statement')],
                                       default='b', required=True, string="Type")
 
-    cnab_lines = fields.One2many('cnab.lines','statement_id','CNAB Lines')
+    cnab_lines = fields.One2many('cnab.lines', 'statement_id', 'CNAB Lines')

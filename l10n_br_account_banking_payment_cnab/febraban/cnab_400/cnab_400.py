@@ -66,7 +66,10 @@ ESPECIE_DE_TITULO = [
     ('99', u'Outros'),
 ]
 
-# Essas instruções deverão ser enviadas no Arquivo-Remessa, quando da entrada, desde que código de ocorrência na posição 109 a 110 do registro de transação, seja “01”, para as instruções de protesto/negativação, o CNPJ / CPF e o endereço do Pagador deverão ser informados corretamente
+# Essas instruções deverão ser enviadas no Arquivo-Remessa, quando da
+# entrada, desde que código de ocorrência na posição 109 a 110 do registro
+# de transação, seja “01”, para as instruções de protesto/negativação, o
+# CNPJ / CPF e o endereço do Pagador deverão ser informados corretamente
 LISTA_PRIMEIRA_INSTRUCAO = [
     ('05', u'Protesto Falimentar'),
     ('06', u'Protestar'),
@@ -82,7 +85,6 @@ LISTA_PRIMEIRA_INSTRUCAO = [
     ('14', u'Cobrar encargos após o 15o dia do vencimento'),
     ('15', u'Conceder desconto mesmo se pago após o vencimento'),
 ]
-
 
 
 class Cnab400(Cnab):
@@ -194,7 +196,6 @@ class Cnab400(Cnab):
 
         sacado_endereco = self.retorna_endereco(line.partner_id.id)
 
-
         # Código agencia do cedente
         # cedente_agencia = cedente_agencia
 
@@ -278,7 +279,7 @@ class Cnab400(Cnab):
 
             'primeira_mensagem': u'',
 
-            'identificacao_ocorrencia': 1, # Trazer da nova tela do payment_mode
+            'identificacao_ocorrencia': 1,  # Trazer da nova tela do payment_mode
 
             # numero fatura esta copiando para communication
             'numero_documento':

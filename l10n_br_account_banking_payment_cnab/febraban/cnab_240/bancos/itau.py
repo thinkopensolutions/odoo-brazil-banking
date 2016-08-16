@@ -46,7 +46,7 @@ class Itau240(Cnab240):
         :param order:
         :return:
         """
-        
+
         vals = super(Itau240, self)._prepare_header()
         vals['cedente_dv_ag_cc'] = int(
             vals['cedente_dv_ag_cc'])
@@ -63,16 +63,17 @@ class Itau240(Cnab240):
         vals = super(Itau240, self)._prepare_segmento(line)
         ref = line.move_line_id.transaction_ref[4:12]
         carteira, nosso_numero, digito = self.nosso_numero(ref)
-        #=======================================================================
-        # nº da agência: 1572 
+        #======================================================================
+        # nº da agência: 1572
         # nº da conta corrente, sem o DAC: 22211
         # nº da subcarteira: 109 (Neste teste saiu 000, conforme já mencionado acima)
         # nosso número: 00000008
         # You multiply each char of the number composed with the fields above by the sequence of multipliers - 2 1 2 1 2 1 2 positioned from right to left.
         # (agency+account+carteira+nossonumero) (15722221110900000008)
-        # 
-        #=======================================================================
-        reference = str(line.order_id.mode.bank_id.bra_number) + str(line.order_id.mode.bank_id.acc_number) + str(self.order.mode.boleto_carteira) + str(ref)
+        #
+        #======================================================================
+        reference = str(line.order_id.mode.bank_id.bra_number) + str(
+            line.order_id.mode.bank_id.acc_number) + str(self.order.mode.boleto_carteira) + str(ref)
         vals['cedente_nome'] = line.order_id.company_id.legal_name[:30]
         vals['sacado_nome'] = line.partner_id.legal_name[:30]
         vals['carteira_numero'] = int(line.order_id.mode.boleto_carteira)
@@ -85,14 +86,14 @@ class Itau240(Cnab240):
     # Override cnab_240.nosso_numero. Diferentes números de dígitos entre
     # CEF e Itau
     def nosso_numero(self, format):
-        #should not return digit from this method
+        # should not return digit from this method
         # ust use nosso_numero_dv top return digit
         digito = format[-1:]
         carteira = format[:3]
         nosso_numero = re.sub(
             '[%s]' % re.escape(string.punctuation), '', format[3:-1] or '')
         return carteira, nosso_numero, digito
-    
+
     def nosso_numero_dv(self, format):
         i = 1
         total = 0

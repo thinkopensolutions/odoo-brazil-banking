@@ -43,13 +43,19 @@ class AccountMoveLine(models.Model):
     def validate_boleto_config(self):
         for move_line in self:
             if move_line.payment_mode_id.type_payment != '00':
-                raise Warning(u"In payment mode %s Tipo SPED must be 00 - Duplicata" % move_line.payment_mode_id.name)
+                raise Warning(
+                    u"In payment mode %s Tipo SPED must be 00 - Duplicata" %
+                    move_line.payment_mode_id.name)
             if not move_line.payment_mode_id.internal_sequence_id:
-                raise Warning(u"Please set sequence in payment mode %s" % move_line.payment_mode_id.name)
+                raise Warning(
+                    u"Please set sequence in payment mode %s" %
+                    move_line.payment_mode_id.name)
             if move_line.company_id.own_number_type != '2':
-                raise Warning(u"Tipo de nosso número Sequéncial uniquo por modo de pagamento")
+                raise Warning(
+                    u"Tipo de nosso número Sequéncial uniquo por modo de pagamento")
             if not move_line.payment_mode_id.boleto_type:
-                raise Warning(u"Configure o tipo de boleto no modo de pagamento")
+                raise Warning(
+                    u"Configure o tipo de boleto no modo de pagamento")
             if not move_line.payment_mode_id.boleto_carteira:
                 raise Warning(u"Carteira not set in payment method")
             if not move_line.payment_mode_id.instrucoes:
@@ -74,7 +80,7 @@ class AccountMoveLine(models.Model):
                     else:
                         nosso_numero = self.env['ir.sequence'].next_by_id(
                             move_line.payment_mode_id.
-                                internal_sequence_id.id)
+                            internal_sequence_id.id)
                 else:
                     nosso_numero = move_line.boleto_own_number
                 try:
