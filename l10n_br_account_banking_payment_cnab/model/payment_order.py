@@ -24,6 +24,7 @@ from openerp import models, fields, api
 from openerp.exceptions import Warning
 from openerp.tools.translate import _
 
+
 # TODO: funcao a ser chamada por ação automatizada para resetar o sufixo
 #     diariamente
 
@@ -39,7 +40,7 @@ class PaymentOrder(models.Model):
     sufixo_arquivo = fields.Integer(u'Sufixo do arquivo')
     serie_sufixo_arquivo = fields.Many2one(
         'l10n_br_cnab_file_sufix.sequence', u'Série do Sufixo do arquivo')
-    
+
     # we will validate here user inputs required to export
     # a wrong input shouldn't raise error but should show helpful
     # warning message
@@ -70,13 +71,12 @@ class PaymentOrder(models.Model):
             except:
                 raise Warning(_("Dígito Agência must be integer"))
 
-            
         # move lines must have transaction refernce
         for line in self.line_ids:
             if not line.partner_id:
-                raise Warning(_("Partner not defined for %s" %line.name))
+                raise Warning(_("Partner not defined for %s" % line.name))
             if not line.partner_id.legal_name:
-                raise Warning(_("Rezão Social not defined for %s" %line.partner_id.name))
+                raise Warning(_("Rezão Social not defined for %s" % line.partner_id.name))
             if len(line.partner_id.legal_name) > 30:
                 raise Warning(_("Partner's Rezão Social should not be longer than 30 chars"))
             if not line.partner_id.state_id:
@@ -101,11 +101,12 @@ class PaymentOrder(models.Model):
                 except:
                     raise Warning(_("Transaction reference for move line must be integer"))
             if not line.move_line_id.invoice.number:
-                raise Warning(_("Null value in 'numero_documento' number not defined for invoice %s" % line.move_line_id.invoice.number))
+                raise Warning(_(
+                    "Null value in 'numero_documento' number not defined for invoice %s" % line.move_line_id.invoice.number))
             if len(line.move_line_id.invoice.number) > 10:
-                raise Warning(_("numero_documento can not be more than 10 digits long found %s" %line.move_line_id.invoice.number))
-        
-    
+                raise Warning(_(
+                    "numero_documento can not be more than 10 digits long found %s" % line.move_line_id.invoice.number))
+
     def get_next_number(self, cr, uid, ids, context=None):
         if context is None:
             context = {}
@@ -135,15 +136,15 @@ class PaymentOrder(models.Model):
             self.write(cr, uid, ord.id, {'sufixo_arquivo': seq_no})
         return seq_no
 
-    # @api.multi
-    # def set_to_draft(self, *args):
-    #     super(PaymentOrder, self).set_to_draft(*args)
-    #
-    #     for order in self:
-    #         for line in order.line_ids:
-    #             self.write_added_state_to_move_line(line.move_line_id)
-    #     return True
+        # @api.multi
+        # def set_to_draft(self, *args):
+        #     super(PaymentOrder, self).set_to_draft(*args)
+        #
+        #     for order in self:
+        #         for line in order.line_ids:
+        #             self.write_added_state_to_move_line(line.move_line_id)
+        #     return True
 
-    # @api.multi
-    # def write_added_state_to_move_line(self, mov_line):
-    #     mov_line.state_cnab = 'added'
+        # @api.multi
+        # def write_added_state_to_move_line(self, mov_line):
+        #     mov_line.state_cnab = 'added'

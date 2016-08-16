@@ -31,6 +31,7 @@ import string
 import unicodedata
 import time
 from openerp.exceptions import Warning as UserError
+from openerp.tools.translate import _
 
 TIPO_CONTA_FORNECEDOR = [
     ('1', u'Conta corrente'),
@@ -384,19 +385,19 @@ class PagFor500(Cnab):
         if mode in ('01'):
             return self.lancamento_credito_bradesco(line)
         elif mode in ('02'):
-            raise UserError('Operação não suportada')
+            raise UserError(_('Operação não suportada'))
         elif mode in ('03'):
             return self.lancamento_doc(line)
         elif mode in ('05'):
-            raise UserError('Operação não suportada')
+            raise UserError(_('Operação não suportada'))
         elif mode in ('08'):
             return self.lancamento_ted(line)
         elif mode in ('30'):
-            raise UserError('Operação não suportada')
+            raise UserError(_('Operação não suportada'))
         elif mode in ('31'):
             # titulos de terceiros
             return self.lancamento_titulos_terceiros(line)
-        raise UserError('Operação não suportada')
+        raise UserError(_('Operação não suportada'))
 
     def lancamento_credito_bradesco(self, line):
         # TODO:
