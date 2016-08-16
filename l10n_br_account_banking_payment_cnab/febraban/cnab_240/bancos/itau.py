@@ -73,6 +73,8 @@ class Itau240(Cnab240):
         # 
         #=======================================================================
         reference = str(line.order_id.mode.bank_id.bra_number) + str(line.order_id.mode.bank_id.acc_number) + str(self.order.mode.boleto_carteira) + str(ref)
+        vals['cedente_nome'] = line.order_id.company_id.legal_name[:30]
+        vals['sacado_nome'] = line.partner_id.legal_name[:30]
         vals['carteira_numero'] = int(line.order_id.mode.boleto_carteira)
         vals['nosso_numero'] = int(ref)
         vals['nosso_numero_dv'] = int(self.nosso_numero_dv(reference))
