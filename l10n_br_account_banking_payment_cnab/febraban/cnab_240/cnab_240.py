@@ -160,7 +160,6 @@ class Cnab240(Cnab):
             'cedente_conta_dv': self.order.mode.bank_id.acc_number_dig,
             'cedente_agencia_dv': self.order.mode.bank_id.bra_number_dig,
             'cedente_nome': self.order.company_id.legal_name,
-            'cedente_conta': int(self.order.mode.bank_id.acc_number),
             # DV ag e cc
             'cedente_dv_ag_cc': (self.order.mode.bank_id.acc_number_dig),
             'identificacao_titulo': line.move_line_id.name,  # 25 chars limit
