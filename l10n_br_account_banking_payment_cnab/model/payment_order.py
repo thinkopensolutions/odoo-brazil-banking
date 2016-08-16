@@ -50,19 +50,23 @@ class PaymentOrder(models.Model):
             raise UserError(_("Please select lines to export"))
         # code must belong to one of allowed code
         if self.mode_type.code not in ['240', '400', '500']:
-            raise UserError(_("Payment Type Code must be 240, 400 or 500, found %s" % self.mode_type.code))
+            raise UserError(
+                _("Payment Type Code must be 240, 400 or 500, found %s" % self.mode_type.code))
         # legal name max length is accepted 30 chars
         if len(self.company_id.legal_name) > 30:
-            raise UserError(_("Company's Rezão Social should not be longer than 30 chars"))
+            raise UserError(
+                _("Company's Rezão Social should not be longer than 30 chars"))
         if not self.mode.boleto_protesto:
-            raise UserError(_(u"Códigos de Protesto in payment mode not defined"))
+            raise UserError(
+                _(u"Códigos de Protesto in payment mode not defined"))
         if not self.mode.boleto_protesto_prazo:
             raise UserError(u"Prazo protesto in payment mode not defined")
         else:
             try:
                 int(self.mode.boleto_protesto_prazo)
             except:
-                raise UserError(_("Prazo protesto in payment mode must be integer"))
+                raise UserError(
+                    _("Prazo protesto in payment mode must be integer"))
         if not self.mode.bank_id.bra_number_dig:
             raise UserError(_("Dígito Agência not defined"))
         else:
@@ -76,9 +80,11 @@ class PaymentOrder(models.Model):
             if not line.partner_id:
                 raise UserError(_("Partner not defined for %s" % line.name))
             if not line.partner_id.legal_name:
-                raise UserError(_("Rezão Social not defined for %s" % line.partner_id.name))
+                raise UserError(
+                    _("Rezão Social not defined for %s" % line.partner_id.name))
             if len(line.partner_id.legal_name) > 30:
-                raise UserError(_("Partner's Rezão Social should not be longer than 30 chars"))
+                raise UserError(
+                    _("Partner's Rezão Social should not be longer than 30 chars"))
             if not line.partner_id.state_id:
                 raise UserError(_("Partner's state not defined"))
             if not line.partner_id.state_id.code:
@@ -93,13 +99,15 @@ class PaymentOrder(models.Model):
             if not line.partner_id.street:
                 raise UserError(_("Partner's street not defined"))
             if not line.move_line_id.transaction_ref:
-                raise UserError(_("No transaction reference set for move %s" % line.move_line_id.name))
+                raise UserError(
+                    _("No transaction reference set for move %s" % line.move_line_id.name))
             # Itau code : 341 supposed not to be larger than 8 digits
             if self.mode.bank_id.bank.bic == '341':
                 try:
                     int(line.move_line_id.transaction_ref[4:12])
                 except:
-                    raise UserError(_("Transaction reference for move line must be integer"))
+                    raise UserError(
+                        _("Transaction reference for move line must be integer"))
             if not line.move_line_id.invoice.number:
                 raise UserError(_(
                     "Null value in 'numero_documento' number not defined for invoice %s" % line.move_line_id.invoice.number))
