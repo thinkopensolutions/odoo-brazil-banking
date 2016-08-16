@@ -24,7 +24,7 @@
 
 {
     'name': 'Account Payment CNAB',
-    'version': '0.1',
+    'version': '0.1.1',
     'category': 'Banking addons',
     'license': 'AGPL-3',
     'author': 'KMEE',

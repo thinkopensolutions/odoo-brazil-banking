@@ -25,7 +25,7 @@
 
 {
     'name': 'Brazilian Account Banking - Debit and Payments Export Infrastructure',
-    'version': '8.0.0.0.0',
+    'version': '0.2.3',
     'license': 'AGPL-3',
     'author': "KMEE, "
               "Odoo Community Association (OCA)",
