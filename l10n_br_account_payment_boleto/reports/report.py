@@ -54,13 +54,18 @@ class report_custom(report_int):
         active_model = context.get('active_model')
         pool = pooler.get_pool(cr.dbname)
         ids_move_lines = []
-
+        if not active_model:
+            active_model =  context.get('default_model')
         aml_obj = pool.get('account.move.line')
         if active_model == 'account.invoice':
             ai_obj = pool.get('account.invoice')
             # this case happens when we open wizard to send email and change template in "Use template" field
             if not active_ids:
-                active_ids = [context.get('active_id')]
+                if context.get('active_id'):
+                    active_ids = [context.get('active_id')]
+                if not active_ids and context.get('default_res_id'):
+                    active_ids = [context.get('default_res_id')]
+                context.update({'boleto_no_attachment' : True})
             for account_invoice in ai_obj.browse(cr, uid, active_ids):
                 ids_move_lines_attach = []
                 for move_line in account_invoice.move_line_receivable_id:
@@ -68,7 +73,7 @@ class report_custom(report_int):
                     ids_move_lines_attach.append(move_line.id)
 
                 # generate separate report for each invoice to attach
-                if len(ids_move_lines_attach):
+                if len(ids_move_lines_attach) and not context.get('boleto_no_attachment',False):
                     boleto_list = aml_obj.send_payment(
                         cr, uid, ids_move_lines_attach)
                     pdf_string_attach = Boleto.get_pdfs(boleto_list)
