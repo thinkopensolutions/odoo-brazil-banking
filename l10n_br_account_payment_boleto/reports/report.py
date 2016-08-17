@@ -56,9 +56,11 @@ class report_custom(report_int):
         ids_move_lines = []
 
         aml_obj = pool.get('account.move.line')
-
         if active_model == 'account.invoice':
             ai_obj = pool.get('account.invoice')
+            # this case happens when we open wizard to send email and change template in "Use template" field
+            if not active_ids:
+                active_ids = [context.get('active_id')]
             for account_invoice in ai_obj.browse(cr, uid, active_ids):
                 ids_move_lines_attach = []
                 for move_line in account_invoice.move_line_receivable_id:
