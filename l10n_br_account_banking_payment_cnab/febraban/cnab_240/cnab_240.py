@@ -216,18 +216,15 @@ class Cnab240(Cnab):
 
     def remessa(self, order):
         """
-
         :param order:
         :return:
         """
         cobrancasimples_valor_titulos = 0
 
         self.order = order
-        header = self._prepare_header()
-        self.arquivo = Arquivo(self.bank, **header)
+        self.arquivo = Arquivo(self.bank, **self._prepare_header())
         for line in order.line_ids:
-            seg = self._prepare_segmento(line)
-            self.arquivo.incluir_cobranca(header, **seg)
+            self.arquivo.incluir_cobranca(**self._prepare_segmento(line))
             self.arquivo.lotes[0].header.servico_servico = 1
             # TODO: tratar soma de tipos de cobranca
             cobrancasimples_valor_titulos += line.amount_currency
