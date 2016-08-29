@@ -82,9 +82,6 @@ class PaymentOrder(models.Model):
             if not line.partner_id.legal_name:
                 raise UserError(
                     _("Rezão Social not defined for %s" % line.partner_id.name))
-            if len(line.partner_id.legal_name) > 30:
-                raise UserError(
-                    _("Partner's Rezão Social should not be longer than 30 chars"))
             if not line.partner_id.state_id:
                 raise UserError(_("Partner's state not defined"))
             if not line.partner_id.state_id.code:
