@@ -32,13 +32,16 @@ class AccountInvoice(models.Model):
 
     @api.multi
     def action_move_create(self):
-        value = super(AccountInvoice, self).action_move_create()
-
+        # set transaction_id in invoice before calling super
+        # because finalize_invoice_move_lines() tries to read it and
+        # set on move lines if it is 
+        # called after super finalize_invoice_move_lines()
+        # will never set transaction_ref in move lines
         for invoice in self:
             sequence = self.env['ir.sequence'].next_by_id(
                 self.company_id.transaction_id_sequence.id)
             invoice.transaction_id = sequence
-
+        value = super(AccountInvoice, self).action_move_create()
         return value
 
     @api.multi
