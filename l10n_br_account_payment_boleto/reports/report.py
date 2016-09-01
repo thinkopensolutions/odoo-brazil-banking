@@ -59,14 +59,10 @@ class report_custom(report_int):
         aml_obj = pool.get('account.move.line')
         if active_model == 'account.invoice':
             ai_obj = pool.get('account.invoice')
-            # this case happens when we open wizard to send email and change template in "Use template" field
-            if not active_ids:
-                if context.get('active_id'):
-                    active_ids = [context.get('active_id')]
-                if not active_ids and context.get('default_res_id'):
-                    active_ids = [context.get('default_res_id')]
+            # do not attach in attachment on sending email
+            if 'default_composition_mode' in context.keys():
                 context.update({'boleto_no_attachment' : True})
-            for account_invoice in ai_obj.browse(cr, uid, active_ids):
+            for account_invoice in ai_obj.browse(cr, uid, ids):
                 ids_move_lines_attach = []
                 for move_line in account_invoice.move_line_receivable_id:
                     ids_move_lines.append(move_line.id)
