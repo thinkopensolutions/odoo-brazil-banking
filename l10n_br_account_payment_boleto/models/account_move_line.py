@@ -80,32 +80,13 @@ class AccountMoveLine(models.Model):
         self.validate_boleto_config()
         for move_line in self:
             if move_line.payment_mode_id.type_payment == '00':
-                number_type = move_line.company_id.own_number_type
-                if not move_line.boleto_own_number:
-                    if number_type == '0':
-                        nosso_numero = self.env['ir.sequence'].next_by_id(
-                            move_line.company_id.own_number_sequence.id)
-                    elif number_type == '1':
-                        nosso_numero = \
-                            move_line.transaction_ref.replace('/', '')
-
-                    else:
-                        nosso_numero = self.env['ir.sequence'].next_by_id(
-                            move_line.payment_mode_id.
-                            internal_sequence_id.id)
-                else:
-                    nosso_numero = move_line.boleto_own_number
-                try:
-                    int(nosso_numero)
-                except:
-                    raise UserError(_(
-                        u"Nosso numero must be integer please check prefix and suffix in payment method sequence"))
+                # nosso numero must be integer
+                nosso_numero =  \
+                ''.join(digit for digit in move_line.invoice.transaction_id if digit.isdigit())
                 boleto = Boleto.getBoleto(move_line, nosso_numero)
                 if boleto:
                     move_line.date_payment_created = date.today()
-                    move_line.transaction_ref = \
+                    move_line.boleto_own_number = \
                         boleto.boleto.format_nosso_numero()
-                    move_line.boleto_own_number = nosso_numero
-
                     boleto_list.append(boleto.boleto)
         return boleto_list
