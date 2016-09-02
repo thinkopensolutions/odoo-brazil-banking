@@ -22,7 +22,8 @@
 ##############################################################################
 
 import logging
-from openerp import models, api
+from openerp import models, api, _
+from openerp.exceptions import Warning
 
 _logger = logging.getLogger(__name__)
 
@@ -38,10 +39,24 @@ class AccountInvoice(models.Model):
         # called after super finalize_invoice_move_lines()
         # will never set transaction_ref in move lines
         for invoice in self:
-            sequence = self.env['ir.sequence'].next_by_id(
-                self.company_id.transaction_id_sequence.id)
+            own_number_type = self.company_id.own_number_type
+            if own_number_type == '0':
+                sequence = self.env['ir.sequence'].next_by_id(
+                    self.company_id.own_number_sequence.id)
+            elif own_number_type == '1':
+                sequence = self.env['ir.sequence'].next_by_id(
+                    self.company_id.transaction_id_sequence.id)
+            elif own_number_type == '2':
+                if not self.payment_mode_id or not self.payment_mode_id.internal_sequence_id:
+                    raise Warning(_(u"Please set payment mode and sequence in selected payment mode"))
+
+                sequence = self.env['ir.sequence'].next_by_id(
+                    self.payment_mode_id.internal_sequence_id.id)
+            else:
+                sequence = False
             invoice.transaction_id = sequence
-        value = super(AccountInvoice, self).action_move_create()
+            value = super(AccountInvoice, invoice).action_move_create()
+
         return value
 
     @api.multi
