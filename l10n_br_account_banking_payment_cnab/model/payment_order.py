@@ -101,7 +101,7 @@ class PaymentOrder(models.Model):
             # Itau code : 341 supposed not to be larger than 8 digits
             if self.mode.bank_id.bank.bic == '341':
                 try:
-                    int(line.move_line_id.transaction_ref[4:12])
+                    int(line.move_line_id.boleto_own_number[4:12])
                 except:
                     raise UserError(
                         _("Transaction reference for move line must be integer"))
