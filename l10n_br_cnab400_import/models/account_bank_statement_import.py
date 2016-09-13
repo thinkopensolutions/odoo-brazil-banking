@@ -23,6 +23,7 @@ import tempfile
 import StringIO
 from openerp import api, models, fields
 from openerp.tools.translate import _
+from openerp.exceptions import Warning as UserError
 from contextlib import contextmanager
 
 try:
@@ -148,14 +149,13 @@ class AccountBankStatementImport(models.TransientModel):
                                         ])
                                     vals_line = {
                                         'date': dia + "-" + mes + "-" + ano,
-                                        'name': str(evento.numero_documento),
+                                        'name': str(evento.identificacao_titulo_banco),
                                         'ref': evento.numero_documento,
                                         'amount': float(
                                             evento.valor_pago) / 100,
                                         'unique_import_id':
                                             evento.identificacao_titulo_banco,
-                                        'partner_id':
-                                            partner and partner.id or False,
+
                                         'bank_account_id': bank_account.id,
                                     }
                                     event_list.append(vals_line)
@@ -194,7 +194,7 @@ class AccountBankStatementImport(models.TransientModel):
         )
 
         if move_line_item:
-            move_line_item.transaction_ref = evento.numero_documento
+            move_line_item.transaction_ref = evento.identificacao_titulo_banco
             move_line_item.ml_identificacao_titulo_no_banco = \
                 evento.identificacao_titulo_banco
 
@@ -228,7 +228,10 @@ class AccountBankStatementImport(models.TransientModel):
         move_line_name = referencia_invoice
         move_line_model = self.env['account.move.line']
         move_line_item = move_line_model.search(
-            [('name', '=', move_line_name)], limit=1)
+            [('name', '=', move_line_name),
+             ('debit', '>', 0),
+             ('account_id.type', '=', 'receivable')
+             ], limit=1)
 
         if move_line_item:
             partner = move_line_item.partner_id

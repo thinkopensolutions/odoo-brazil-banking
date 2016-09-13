@@ -31,15 +31,17 @@
         'python': ['cnab240'],
     },
     'depends': [
-        'account_bank_statement_import',
         'l10n_br_account',
+        'account_bank_statement_import',
     ],
     'data': [
         'view/l10n_br_cnab_move_view.xml',
         'view/account_move_line_view.xml',
         'data/l10n_br_res_partner_bank_type.xml',
     ],
+    'active': False,
     "installable": True,
+    "auto_install": False,
     'description': """
     Allows to import CNAB 400 (Centro Nacional de Automação Bancária)
     statement files.
