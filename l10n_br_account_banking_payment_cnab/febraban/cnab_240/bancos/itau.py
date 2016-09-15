@@ -61,7 +61,7 @@ class Itau240(Cnab240):
         :return:
         """
         vals = super(Itau240, self)._prepare_segmento(line)
-        ref = line.move_line_id.boleto_own_number[4:12]
+        ref = line.move_line_id.transaction_ref
         carteira, nosso_numero, digito = self.nosso_numero(ref)
         #======================================================================
         # nº da agência: 1572
