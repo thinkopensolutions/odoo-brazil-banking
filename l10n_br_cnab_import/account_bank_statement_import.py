@@ -23,6 +23,7 @@ import StringIO
 from decimal import Decimal
 from openerp import api, models, fields
 from .file_cnab240_parser import Cnab240Parser as cnabparser
+from cnab_explicit_errors import service_codigo_message, table_1, table_2, table_3, table_4, table_5
 
 
 _logger = logging.getLogger(__name__)
@@ -73,14 +74,55 @@ class AccountBankStatementImport(models.TransientModel):
         cnab_line = self.env['cnab.lines'].create(line_vals)
         return cnab_line
 
+
+    def get_explicit_error_message(self, message_dict, code, error):
+        message = error_message = False
+        if code in message_dict.keys():
+            message = message_dict.get(code)
+        # Table 1
+        if code == 3:
+            error_message = table_1.get(error)
+        # Table 2
+        if code == 17:
+            error_message = table_2.get(error)
+        # Table 3
+        if code == 16:
+            error_message = table_3.get(error)
+        # Table 4
+        if code == 15:
+            error_message = table_4.get(error)
+        # Table 5
+        if code == 18:
+            error_message = table_5.get(error)
+        return message, error_message
+
     @api.model
     def _create_bank_statement(self, stmt_vals):
-
+        transactions = stmt_vals['transactions']
+        # omit trnasactions with servico_codigo_movimento != 6 for itau_cobranca_240
+        if self.import_modes == 'itau_cobranca_240':
+            transation_ids = []
+            for stmt in stmt_vals['transactions']:
+                if stmt.get('servico_codigo_movimento') == 6:
+                    transation_ids.append(stmt)
+            stmt_vals['transactions'] = transation_ids
         statement_id, notifications = super(
             AccountBankStatementImport, self)._create_bank_statement(stmt_vals)
-        if stmt_vals.get('statement_type') == 'c':
-            for line in stmt_vals['line_ids']:
-                self.create_cnab_lines(line[2], statement_id)
+
+        if stmt_vals.get('statement_type') == 'c' and stmt_vals.get('line_ids') and self.import_modes == 'itau_cobranca_240':
+            for line in transactions:
+                # get service codigo message
+
+                servico_codigo_movimento = line.get('servico_codigo_movimento')
+                error = int(line.get('errors'))
+                message, error_message = self.get_explicit_error_message(service_codigo_message,
+                                                                         servico_codigo_movimento, error)
+                if message:
+                    line.update({'servico_codigo_movimento':
+                                     str(line['servico_codigo_movimento']) + ' - ' + message,
+                                 'error_message': error_message,
+                                 })
+                self.create_cnab_lines(line, statement_id)
         return statement_id, notifications
 
     @api.model
