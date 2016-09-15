@@ -25,9 +25,7 @@ from openerp import api, models, fields
 from .file_cnab240_parser import Cnab240Parser as cnabparser
 from cnab_explicit_errors import service_codigo_message, table_1, table_2, table_3, table_4, table_5
 
-
 _logger = logging.getLogger(__name__)
-
 
 MODOS_IMPORTACAO_CNAB = [
     ('bradesco_pag_for', u'Bradesco PagFor 500'),
@@ -45,7 +43,7 @@ class AccountBankStatementImport(models.TransientModel):
     import_modes = fields.Selection(
         MODOS_IMPORTACAO_CNAB,
         string=u'Opções de importação', select=True, required=False)
-    import_cnab = fields.Boolean(string="Import Cnab",)
+    import_cnab = fields.Boolean(string="Import Cnab", )
 
     @api.model
     def _check_cnab(self, data_file):
@@ -74,26 +72,28 @@ class AccountBankStatementImport(models.TransientModel):
         cnab_line = self.env['cnab.lines'].create(line_vals)
         return cnab_line
 
-
     def get_explicit_error_message(self, message_dict, code, error):
-        message = error_message = False
+        message = error_message = ''
         if code in message_dict.keys():
             message = message_dict.get(code)
-        # Table 1
-        if code == 3:
-            error_message = table_1.get(error)
-        # Table 2
-        if code == 17:
-            error_message = table_2.get(error)
-        # Table 3
-        if code == 16:
-            error_message = table_3.get(error)
-        # Table 4
-        if code == 15:
-            error_message = table_4.get(error)
-        # Table 5
-        if code == 18:
-            error_message = table_5.get(error)
+        errors = [error[0:2], error[2:4], error[4:6], error[6:8]]
+        for error in errors:
+            error = int(error)
+            # Table 1
+            if code == 3 and table_1.get(error):
+                error_message += str(error) + ' - ' + table_1.get(error) + '\n'
+            # Table 2
+            if code == 17 and table_2.get(error):
+                error_message += str(error) + ' - ' + table_2.get(error) + '\n'
+            # Table 3
+            if code == 16 and table_3.get(error):
+                error_message += str(error) + ' - ' + table_3.get(error) + '\n'
+            # Table 4
+            if code == 15 and table_4.get(error):
+                error_message += str(error) + ' - ' + table_4.get(error) + '\n'
+            # Table 5
+            if code == 18 and table_5.get(error):
+                error_message += str(error) + ' - ' + table_5.get(error) + '\n'
         return message, error_message
 
     @api.model
@@ -109,12 +109,13 @@ class AccountBankStatementImport(models.TransientModel):
         statement_id, notifications = super(
             AccountBankStatementImport, self)._create_bank_statement(stmt_vals)
 
-        if stmt_vals.get('statement_type') == 'c' and stmt_vals.get('line_ids') and self.import_modes == 'itau_cobranca_240':
+        if stmt_vals.get('statement_type') == 'c' and stmt_vals.get(
+                'line_ids') and self.import_modes == 'itau_cobranca_240':
             for line in transactions:
                 # get service codigo message
 
                 servico_codigo_movimento = line.get('servico_codigo_movimento')
-                error = int(line.get('errors'))
+                error = str(line.get('errors'))
                 message, error_message = self.get_explicit_error_message(service_codigo_message,
                                                                          servico_codigo_movimento, error)
                 if message:
@@ -133,7 +134,7 @@ class AccountBankStatementImport(models.TransientModel):
         stmt_vals['journal_id'] = journal_id
         journal = self.env['account.journal'].browse(journal_id)
         if journal.with_last_closing_balance:
-            start = self.env['account.bank.statement']\
+            start = self.env['account.bank.statement'] \
                 ._compute_balance_end_real(journal_id)
             stmt_vals['balance_start'] = Decimal("%.4g" % start)
             stmt_vals['balance_end_real'] += Decimal("%.4g" % start)
