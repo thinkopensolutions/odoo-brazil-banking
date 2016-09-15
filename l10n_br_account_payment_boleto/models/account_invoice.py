@@ -40,22 +40,22 @@ class AccountInvoice(models.Model):
         # will never set transaction_ref in move lines
         for invoice in self:
             own_number_type = self.company_id.own_number_type
+            sequence = False
             if own_number_type == '0':
                 sequence = self.env['ir.sequence'].next_by_id(
                     self.company_id.own_number_sequence.id)
             elif own_number_type == '1':
                 sequence = self.env['ir.sequence'].next_by_id(
                     self.company_id.transaction_id_sequence.id)
-            elif own_number_type == '2':
-                if not self.payment_mode_id or not self.payment_mode_id.internal_sequence_id:
-                    raise Warning(_(u"Please set payment mode and sequence in selected payment mode"))
-
-                sequence = self.env['ir.sequence'].next_by_id(
-                    self.payment_mode_id.internal_sequence_id.id)
-            else:
-                sequence = False
-            invoice.transaction_id = sequence
+            if sequence:
+                invoice.transaction_id = sequence
             value = super(AccountInvoice, invoice).action_move_create()
+            if own_number_type == '2':
+                for move_line in invoice.move_id.line_id:
+                    if invoice.account_id.id == move_line.account_id.id:
+                        sequence = self.env['ir.sequence'].next_by_id(
+                            self.payment_mode_id.internal_sequence_id.id)
+                        move_line.transaction_ref = sequence
 
         return value
 

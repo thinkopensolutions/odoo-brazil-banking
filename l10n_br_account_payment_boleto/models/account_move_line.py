@@ -82,7 +82,7 @@ class AccountMoveLine(models.Model):
             if move_line.payment_mode_id.type_payment == '00':
                 # nosso numero must be integer
                 nosso_numero =  \
-                ''.join(digit for digit in move_line.invoice.transaction_id if digit.isdigit())
+                ''.join(digit for digit in move_line.transaction_ref if digit.isdigit())
                 boleto = Boleto.getBoleto(move_line, nosso_numero)
                 if boleto:
                     move_line.date_payment_created = date.today()
