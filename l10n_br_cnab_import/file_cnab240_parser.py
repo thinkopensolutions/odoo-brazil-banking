@@ -86,7 +86,8 @@ class Cnab240Parser(object):
                     'transaction_id': evento.numero_documento,
                     # nosso numero, Alfanumérico
                     'unique_import_id': evento.numero_documento,
-                    'servico_codigo_movimento': evento.servico_codigo_movimento
+                    'servico_codigo_movimento': evento.servico_codigo_movimento,
+                    'errors' : evento.motivo_ocorrencia # 214-221
                 })
                 total_amt += evento.valor_titulo
 
