@@ -229,34 +229,3 @@ table_5 = {
     41: "AUTOMATICAMENTE REJEITADA",
     42: "CONFIRMA RECEBIMENTO DE INSTRUÇÃO – PENDENTE DE ANÁLISE",
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
