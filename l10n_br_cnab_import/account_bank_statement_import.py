@@ -116,6 +116,11 @@ class AccountBankStatementImport(models.TransientModel):
 
                 servico_codigo_movimento = line.get('servico_codigo_movimento')
                 error = str(line.get('errors'))
+                # remove unwnanted keys from dict 
+                line.pop('errors', None)
+                line.pop('label', None)
+                line.pop('sequence', None)
+
                 message, error_message = self.get_explicit_error_message(service_codigo_message,
                                                                          servico_codigo_movimento, error)
                 if message:
