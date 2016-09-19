@@ -76,20 +76,26 @@ class Cnab240Parser(object):
         total_amt = Decimal(0.00)
         for lote in arquivo.lotes:
             for evento in lote.eventos:
-                transacoes.append({
-                    'name': evento.sacado_nome,
-                    'date': datetime.datetime.strptime(
-                        str(evento.vencimento_titulo), '%d%m%Y'),
-                    'amount': evento.valor_titulo,
-                    'ref': evento.numero_documento,
-                    'label': evento.sacado_inscricao_numero,  # cnpj
-                    'transaction_id': evento.numero_documento,
-                    # nosso numero, Alfanumérico
-                    'unique_import_id': evento.numero_documento,
-                    'servico_codigo_movimento': evento.servico_codigo_movimento,
-                    'errors' : evento.motivo_ocorrencia # 214-221
-                })
-                total_amt += evento.valor_titulo
+                if evento.servico_segmento == 'T':
+                    numero_documento_seg_t = evento.numero_documento
+                    transacoes.append({
+                        'name': evento.sacado_nome,
+                        'date': datetime.datetime.strptime(
+                            str(evento.vencimento_titulo), '%d%m%Y'),
+                        'amount': evento.valor_titulo,
+                        'ref': evento.numero_documento,
+                        'label': evento.sacado_inscricao_numero,  # cnpj
+                        'transaction_id': evento.numero_documento,
+                        # nosso numero, Alfanumérico
+                        'unique_import_id': evento.numero_documento,
+                        'servico_codigo_movimento': evento.servico_codigo_movimento,
+                        'errors' : evento.motivo_ocorrencia # 214-221
+                    })
+                else:
+                    # set amount from segment U, it has with juros
+                    if evento.servico_segmento == 'U':
+                        transacoes[-1]['amount']= evento.titulo_liquido
+                    total_amt += evento.titulo_liquido
 
         vals_bank_statement = {
             'name': '%s - %s' % (arquivo.header.nome_do_banco,
