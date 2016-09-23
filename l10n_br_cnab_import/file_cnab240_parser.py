@@ -87,7 +87,7 @@ class Cnab240Parser(object):
                         'label': evento.sacado_inscricao_numero,  # cnpj
                         'transaction_id': evento.numero_documento,
                         # nosso numero, Alfanumérico
-                        'unique_import_id': evento.numero_documento,
+                        'unique_import_id': str(arquivo.header.arquivo_sequencia)+'-' + str(evento.numero_documento),
                         'servico_codigo_movimento': evento.servico_codigo_movimento,
                         'errors' : evento.motivo_ocorrencia # 214-221
                     })
