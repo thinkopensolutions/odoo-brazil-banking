@@ -109,8 +109,7 @@ class AccountBankStatementImport(models.TransientModel):
         statement_id, notifications = super(
             AccountBankStatementImport, self)._create_bank_statement(stmt_vals)
 
-        if stmt_vals.get('statement_type') == 'c' and stmt_vals.get(
-                'line_ids') and self.import_modes == 'itau_cobranca_240':
+        if stmt_vals.get('statement_type') == 'c' and self.import_modes == 'itau_cobranca_240':
             for line in transactions:
                 # get service codigo message
 
