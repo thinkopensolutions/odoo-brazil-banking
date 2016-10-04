@@ -165,7 +165,7 @@ class Cnab240(Cnab):
             'identificacao_titulo': line.move_line_id.name,  # 25 chars limit
             'identificacao_titulo_banco': u'0000000',  # TODO
             'identificacao_titulo_empresa': line.move_line_id.move_id.name,
-            'numero_documento': line.move_line_id.invoice.number,  # 10 chars limit
+            'numero_documento': line.move_line_id.move_id.name,  # 10 chars limit
             'vencimento_titulo': self.format_date(
                 line.ml_maturity_date),
             'valor_titulo': Decimal(str(line.amount_currency)).quantize(
