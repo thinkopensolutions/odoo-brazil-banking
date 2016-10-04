@@ -105,12 +105,12 @@ class PaymentOrder(models.Model):
                 except:
                     raise UserError(
                         _("Transaction reference for move line must be integer"))
-            if not line.move_line_id.invoice.number:
+            if not line.move_line_id.move_id.name:
                 raise UserError(_(
-                    "Null value in 'numero_documento' number not defined for invoice %s" % line.move_line_id.invoice.number))
-            if len(line.move_line_id.invoice.number) > 10:
+                    "Null value in 'numero_documento' number not defined for invoice %s" % line.move_line_id.move_id.name))
+            if len(line.move_line_id.move_id.name) > 10:
                 raise UserError(_(
-                    "numero_documento can not be more than 10 digits long found %s" % line.move_line_id.invoice.number))
+                    "numero_documento can not be more than 10 digits long found %s" % line.move_line_id.move_id.name))
 
     def get_next_number(self, cr, uid, ids, context=None):
         if context is None:
