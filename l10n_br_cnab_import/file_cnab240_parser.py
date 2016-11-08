@@ -77,7 +77,6 @@ class Cnab240Parser(object):
         for lote in arquivo.lotes:
             for evento in lote.eventos:
                 if evento.servico_segmento == 'T':
-                    numero_documento_seg_t = evento.numero_documento
                     transacoes.append({
                         'name': evento.sacado_nome,
                         'date': datetime.datetime.strptime(
@@ -87,16 +86,21 @@ class Cnab240Parser(object):
                         'label': evento.sacado_inscricao_numero,  # cnpj
                         'transaction_id': evento.numero_documento,
                         # nosso numero, Alfanumérico
-                        'unique_import_id': str(arquivo.header.arquivo_sequencia)+'-' + str(evento.numero_documento),
+                        'unique_import_id': str(arquivo.header.arquivo_sequencia) + '-' + str(evento.numero_documento),
                         'servico_codigo_movimento': evento.servico_codigo_movimento,
-                        'errors' : evento.motivo_ocorrencia # 214-221
+                        'errors': evento.motivo_ocorrencia  # 214-221
                     })
                 else:
                     # set amount from segment U, it has with juros
+                    # Formula:
+                    # amount = base_value + interest - (discount + rebate)
+                    base_value = transacoes[-1]['amount']
+                    interest = evento.titulo_acrescimos
+                    discount = evento.titulo_acrescimos
+                    rebate = evento.titulo_abatimento
                     if evento.servico_segmento == 'U':
-                        transacoes[-1]['amount']= evento.titulo_liquido
+                        transacoes[-1]['amount'] = base_value + interest - (discount + rebate)
                     total_amt += evento.titulo_liquido
-
         vals_bank_statement = {
             'name': '%s - %s' % (arquivo.header.nome_do_banco,
                                  arquivo.header.arquivo_data_de_geracao),
