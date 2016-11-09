@@ -30,3 +30,24 @@ class AccountBankStatement(models.Model):
                                       default='b', required=True, string="Type")
 
     cnab_lines = fields.One2many('cnab.lines', 'statement_id', 'CNAB Lines')
+    
+class AccountBankStatementLine(models.Model):
+    """  """
+    _inherit = 'account.bank.statement.line'
+    
+    def _domain_reconciliation_proposition(self, cr, uid, st_line, excluded_ids=None, context=None):
+        # if statement is canb return statement then 
+        # chnage domain with transaction_ref
+        if st_line.statement_id.statement_type == 'c':
+            if excluded_ids is None:
+                excluded_ids = []
+            domain = [('transaction_ref', '=', st_line.ref),
+                      ('reconcile_id', '=', False),
+                      ('state', '=', 'valid'),
+                      ('account_id.reconcile', '=', True),
+                      ('id', 'not in', excluded_ids),]
+            if st_line.partner_id:
+                domain.append(('partner_id', '=', st_line.partner_id.id))
+            return domain
+        else:
+            return super(AccountBankStatementLine,self)._domain_reconciliation_proposition(cr, uid, st_line, excluded_ids=excluded_ids, context=context)

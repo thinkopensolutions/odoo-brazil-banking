@@ -55,7 +55,7 @@ class AccountInvoice(models.Model):
                     if invoice.account_id.id == move_line.account_id.id:
                         sequence = self.env['ir.sequence'].next_by_id(
                             self.payment_mode_id.internal_sequence_id.id)
-                        # set transaction_ref
+                        # set transactionref
                         move_line.transaction_ref = sequence
 
 
