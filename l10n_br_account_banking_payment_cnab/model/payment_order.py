@@ -53,9 +53,6 @@ class PaymentOrder(models.Model):
             raise UserError(
                 _("Payment Type Code must be 240, 400 or 500, found %s" % self.mode_type.code))
         # legal name max length is accepted 30 chars
-        if len(self.company_id.legal_name) > 30:
-            raise UserError(
-                _("Company's Rezão Social should not be longer than 30 chars"))
         if not self.mode.boleto_protesto:
             raise UserError(
                 _(u"Códigos de Protesto in payment mode not defined"))
