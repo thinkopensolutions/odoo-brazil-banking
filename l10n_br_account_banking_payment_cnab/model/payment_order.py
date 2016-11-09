@@ -81,7 +81,7 @@ class PaymentOrder(models.Model):
                 raise UserError(_("Partner not defined for %s" % line.name))
             if not line.partner_id.legal_name:
                 raise UserError(
-                    _("Rezão Social not defined for %s" % line.partner_id.name))
+                    _(u"Razão Social not defined for %s" % line.partner_id.name))
             if not line.partner_id.state_id:
                 raise UserError(_("Partner's state not defined"))
             if not line.partner_id.state_id.code:
