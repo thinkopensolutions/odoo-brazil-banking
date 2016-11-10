@@ -96,7 +96,7 @@ class Cnab240Parser(object):
                     # amount = base_value + interest - (discount + rebate)
                     base_value = transacoes[-1]['amount']
                     interest = evento.titulo_acrescimos
-                    discount = evento.evento.titulo_desconto
+                    discount = evento.titulo_desconto
                     rebate = evento.titulo_abatimento
                     if evento.servico_segmento == 'U':
                         transacoes[-1]['amount'] = base_value + interest - (discount + rebate)
