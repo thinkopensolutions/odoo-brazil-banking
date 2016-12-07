@@ -91,7 +91,7 @@ class Cnab240Parser(object):
                         'errors': evento.motivo_ocorrencia  # 214-221
                     })
                 else:
-                    # set amount from segment U, it has with juros
+                    # set amount and data_ocorrencia from segment U, it has with juros
                     # Formula:
                     # amount = base_value + interest - (discount + rebate)
                     base_value = transacoes[-1]['amount']
@@ -100,6 +100,9 @@ class Cnab240Parser(object):
                     rebate = evento.titulo_abatimento
                     if evento.servico_segmento == 'U':
                         transacoes[-1]['amount'] = base_value + interest - (discount + rebate)
+                        # replace vencimento with data_ocorrencia
+                        transacoes[-1]['date'] = datetime.datetime.strptime(
+                            str(evento.data_ocorrencia), '%d%m%Y')
                     total_amt += evento.titulo_liquido
         vals_bank_statement = {
             'name': '%s - %s' % (arquivo.header.nome_do_banco,
