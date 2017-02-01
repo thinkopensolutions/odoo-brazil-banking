@@ -80,7 +80,7 @@ class Cnab240Parser(object):
                     transacoes.append({
                         'name': evento.sacado_nome,
                         'date': datetime.datetime.strptime(
-                            str(evento.vencimento_titulo), '%d%m%Y'),
+                            str(evento.vencimento_titulo).zfill(8), '%d%m%Y').date(),
                         'amount': evento.valor_titulo,
                         'ref': evento.numero_documento,
                         'label': evento.sacado_inscricao_numero,  # cnpj
@@ -102,7 +102,7 @@ class Cnab240Parser(object):
                         transacoes[-1]['amount'] = base_value + interest - (discount + rebate)
                         # replace vencimento with data_ocorrencia
                         transacoes[-1]['date'] = datetime.datetime.strptime(
-                            str(evento.data_ocorrencia), '%d%m%Y')
+                            str(evento.data_ocorrencia).zfill(8), '%d%m%Y')
                     total_amt += evento.titulo_liquido
         vals_bank_statement = {
             'name': '%s - %s' % (arquivo.header.nome_do_banco,
