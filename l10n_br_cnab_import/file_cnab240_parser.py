@@ -108,7 +108,7 @@ class Cnab240Parser(object):
             'name': '%s - %s' % (arquivo.header.nome_do_banco,
                                  arquivo.header.arquivo_data_de_geracao),
             'date': datetime.datetime.strptime(
-                str(arquivo.header.arquivo_data_de_geracao), '%d%m%Y'),
+                str(arquivo.header.arquivo_data_de_geracao).zfill(8), '%d%m%Y'),
             'balance_start': 0.00,
             'balance_end_real': total_amt,
             'currency_code': u'BRL',  # Código da moeda
